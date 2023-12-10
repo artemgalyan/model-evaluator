@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "model-evaluator"
-version = "0.10.0"
+version = "1.0.0"
 authors = [
     { name = "Artyom Galyan", email = "galyanartyom@gmail.com" }
 ]
