@@ -132,8 +132,8 @@ class Trainer:
         for metric in self._metrics:
             df_columns.append(metric.__metric_name__)
         self._history = pd.DataFrame(columns=df_columns)
-        self._history.index = self._history['Epoch']
-        self._history = self._history.drop('Epoch', axis=1)
+        # self._history.index = self._history['Epoch']
+        # self._history = self._history.drop('Epoch', axis=1)
 
     def train(self, epochs: int,
               train_loader: DataLoader,
@@ -227,4 +227,4 @@ class Trainer:
         """
         clear_output(wait=True)
         self._plotter.replot()
-        display(HTML(self._history.to_html()))
+        display(HTML(self._history.to_html(index=False)))

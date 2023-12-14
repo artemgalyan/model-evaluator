@@ -40,9 +40,10 @@ Then you can import library and use it in your code:
 
 ## Authors
 
-Artsiom Halian - [GitHub](github.com/artyomgalyan)
+Artsiom Halian - [GitHub](https://github.com/artyomgalyan)
 
 ## Versions
 
+1.0.2 - Fixed history error\
 1.0.1 - Updated readme\
 1.0.0 - Initial version
