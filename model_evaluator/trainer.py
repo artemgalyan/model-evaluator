@@ -167,7 +167,9 @@ class Trainer:
                 outputs = self._model(inputs)
                 if outputs.shape[1] == 1:  # binary classification
                     outputs = outputs.view(-1)
-                loss = self._loss(outputs, labels.float())
+                    loss = self._loss(outputs, labels.float())
+                else:
+                    loss = self._loss(outputs, labels)
                 loss.backward()
                 self._optimizer.step()
                 plotted_loss += loss.item()
@@ -218,7 +220,9 @@ class Trainer:
             inputs = inputs.to(device)
             labels = labels.to(device)
             result_preds.append(self._model(inputs))
-            result_labels.append(labels.float())
+            if labels.shape[1] == 1:
+                labels = labels.float()
+            result_labels.append(labels)
         return torch.cat(result_preds), torch.cat(result_labels)
 
     def _show(self) -> None:
