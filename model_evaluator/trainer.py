@@ -165,7 +165,7 @@ class Trainer:
                 self._optimizer.zero_grad()
 
                 outputs = self._model(inputs)
-                if outputs.shape[1] == 1:  # binary classification
+                if len(outputs.shape) == 1 or outputs.shape[1] == 1:  # binary classification
                     outputs = outputs.view(-1)
                     loss = self._loss(outputs, labels.float())
                 else:
@@ -190,7 +190,7 @@ class Trainer:
                 predictions, labels = self._evaluate(test_loader, device)
                 predictions = predictions.cpu()
                 labels = labels.cpu()
-                if predictions.shape[1] == 1:  # binary classification
+                if len(predictions.shape) == 1 or predictions.shape[1] == 1:  # binary classification
                     predictions = predictions.view(-1)
                     classes = predictions >= 0.5
                 else:
@@ -220,7 +220,7 @@ class Trainer:
             inputs = inputs.to(device)
             labels = labels.to(device)
             result_preds.append(self._model(inputs))
-            if labels.shape[1] == 1:
+            if len(labels.shape) == 1 or labels.shape[1] == 1:
                 labels = labels.float()
             result_labels.append(labels)
         return torch.cat(result_preds), torch.cat(result_labels)
