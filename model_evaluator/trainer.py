@@ -165,6 +165,8 @@ class Trainer:
                 self._optimizer.zero_grad()
 
                 outputs = self._model(inputs)
+                if not isinstance(outputs, torch.Tensor):
+                    outputs = torch.tensor(outputs)
                 if len(outputs.shape) == 1 or outputs.shape[1] == 1:  # binary classification
                     outputs = outputs.view(-1)
                     loss = self._loss(outputs, labels.float())
@@ -190,6 +192,8 @@ class Trainer:
             result = [epoch + 1, train_loss]
             with torch.no_grad():
                 predictions, labels = self._evaluate(test_loader, device)
+                if not isinstance(predictions, torch.Tensor):
+                    outputs = torch.tensor(predictions)
                 predictions = predictions.cpu()
                 labels = labels.cpu()
                 if len(predictions.shape) == 1 or predictions.shape[1] == 1:  # binary classification
