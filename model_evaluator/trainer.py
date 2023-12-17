@@ -78,7 +78,7 @@ class Plotter:
                 label='Train Loss')
         if self._plot_options in [PlottingOptions.PLOT_ONLY_TEST, PlottingOptions.PLOT_BOTH]:
             plt.plot(
-                np.linspace(0, len(self._test_history), len(self._test_history)),
+                np.linspace(0, len(self._test_history) - 1, len(self._test_history)),
                 self._test_history,
                 linestyle=self._test_line,
                 label='Test Loss')
@@ -182,6 +182,8 @@ class Trainer:
                 train_loss += loss.item()
             if self._save_models:
                 torch.save(self._model.state_dict(), str(self._save_path / f'model_{epoch}'))
+            if plot_counter != 0:
+                self._plotter.add_train_loss(plotted_loss / plot_counter)
 
             # evaluating the model
             self._model.eval()

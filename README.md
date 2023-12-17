@@ -44,6 +44,7 @@ Artsiom Halian - [GitHub](https://github.com/artyomgalyan)
 
 ## Versions
 
+1.0.5 - Fixed plotting\
 1.0.4 - Fixed binary recognition\
 1.0.3 - Fixed multiclass backward error\
 1.0.2 - Fixed history error\
