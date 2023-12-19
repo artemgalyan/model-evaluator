@@ -166,7 +166,7 @@ class Trainer:
 
                 outputs = self._model(inputs)
                 try:
-                    from transformers import ImageClassifierOutput
+                    from transformers.modeling_outputs import ImageClassifierOutput
                     if isinstance(outputs, ImageClassifierOutput):
                         outputs = torch.tensor(outputs['logits'])
                 except ImportError:

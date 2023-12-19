@@ -44,6 +44,7 @@ Artsiom Halian - [GitHub](https://github.com/artyomgalyan)
 
 ## Versions
 
+1.0.8 - Fixes\
 1.0.7 - Added HuggingFace support\
 1.0.6 - Explicit conversion to tensor\
 1.0.5 - Fixed plotting\
