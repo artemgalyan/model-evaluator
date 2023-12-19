@@ -165,8 +165,12 @@ class Trainer:
                 self._optimizer.zero_grad()
 
                 outputs = self._model(inputs)
-                if not isinstance(outputs, torch.Tensor):
-                    outputs = torch.tensor(outputs)
+                try:
+                    from transformers import ImageClassifierOutput
+                    if isinstance(outputs, ImageClassifierOutput):
+                        outputs = torch.tensor(outputs['logits'])
+                except ImportError:
+                    pass
                 if len(outputs.shape) == 1 or outputs.shape[1] == 1:  # binary classification
                     outputs = outputs.view(-1)
                     loss = self._loss(outputs, labels.float())
