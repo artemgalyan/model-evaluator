@@ -168,7 +168,7 @@ class Trainer:
                 try:
                     from transformers.modeling_outputs import ImageClassifierOutputWithNoAttention, ImageClassifierOutput
                     if isinstance(outputs, ImageClassifierOutput | ImageClassifierOutputWithNoAttention):
-                        outputs = torch.tensor(outputs['logits'])
+                        outputs = outputs['logits']
                 except ImportError:
                     pass
                 if len(outputs.shape) == 1 or outputs.shape[1] == 1:  # binary classification
