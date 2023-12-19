@@ -196,8 +196,12 @@ class Trainer:
             result = [epoch + 1, train_loss]
             with torch.no_grad():
                 predictions, labels = self._evaluate(test_loader, device)
-                if not isinstance(predictions, torch.Tensor):
-                    outputs = torch.tensor(predictions)
+                try:
+                    from transformers.modeling_outputs import ImageClassifierOutputWithNoAttention, ImageClassifierOutput
+                    if isinstance(outputs, ImageClassifierOutput | ImageClassifierOutputWithNoAttention):
+                        outputs = outputs['logits']
+                except ImportError:
+                    pass
                 predictions = predictions.cpu()
                 labels = labels.cpu()
                 if len(predictions.shape) == 1 or predictions.shape[1] == 1:  # binary classification
