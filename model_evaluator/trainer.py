@@ -1,6 +1,7 @@
 from enum import Enum
 from math import ceil
 from pathlib import Path
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -165,12 +166,7 @@ class Trainer:
                 self._optimizer.zero_grad()
 
                 outputs = self._model(inputs)
-                try:
-                    from transformers.modeling_outputs import ImageClassifierOutputWithNoAttention, ImageClassifierOutput
-                    if isinstance(outputs, ImageClassifierOutput | ImageClassifierOutputWithNoAttention):
-                        outputs = outputs['logits']
-                except ImportError:
-                    pass
+                outputs = self._preprocess_output(outputs)
                 if len(outputs.shape) == 1 or outputs.shape[1] == 1:  # binary classification
                     outputs = outputs.view(-1)
                     loss = self._loss(outputs, labels.float())
@@ -196,12 +192,7 @@ class Trainer:
             result = [epoch + 1, train_loss]
             with torch.no_grad():
                 predictions, labels = self._evaluate(test_loader, device)
-                try:
-                    from transformers.modeling_outputs import ImageClassifierOutputWithNoAttention, ImageClassifierOutput
-                    if isinstance(outputs, ImageClassifierOutput | ImageClassifierOutputWithNoAttention):
-                        outputs = outputs['logits']
-                except ImportError:
-                    pass
+                predictions = self._preprocess_output(predictions)
                 predictions = predictions.cpu()
                 labels = labels.cpu()
                 if len(predictions.shape) == 1 or predictions.shape[1] == 1:  # binary classification
@@ -233,7 +224,7 @@ class Trainer:
             inputs, labels = data
             inputs = inputs.to(device)
             labels = labels.to(device)
-            result_preds.append(self._model(inputs))
+            result_preds.append(self._preprocess_output(self._model(inputs)))
             if len(labels.shape) == 1 or labels.shape[1] == 1:
                 labels = labels.float()
             result_labels.append(labels)
@@ -246,3 +237,13 @@ class Trainer:
         clear_output(wait=True)
         self._plotter.replot()
         display(HTML(self._history.to_html(index=False)))
+
+    @staticmethod
+    def _preprocess_output(output: Any):
+        try:
+            from transformers.modeling_outputs import ImageClassifierOutputWithNoAttention, ImageClassifierOutput
+            if isinstance(output, ImageClassifierOutput | ImageClassifierOutputWithNoAttention):
+                output = output['logits']
+        except ImportError:
+            pass
+        return output

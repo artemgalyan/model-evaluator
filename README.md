@@ -44,6 +44,7 @@ Artsiom Halian - [GitHub](https://github.com/artyomgalyan)
 
 ## Versions
 
+1.0.12 - Fixes\
 1.0.11 - Fixes\
 1.0.10 - Fixes\
 1.0.9 - Fixes\
