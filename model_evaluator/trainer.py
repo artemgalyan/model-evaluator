@@ -97,6 +97,7 @@ class Trainer:
                  loss: _Loss,  # base class for some reason is protected
                  metrics: list[Metric],
                  *,
+                 cpu_loss: _Loss | None,
                  plotting_options: PlottingOptions = PlottingOptions.NO_PLOT,
                  save_models: bool = True,
                  plot_interval: int = 4,
@@ -117,9 +118,12 @@ class Trainer:
 
         For line styles refer to https://matplotlib.org/stable/gallery/lines_bars_and_markers/linestyles.html
         """
+        if cpu_loss is None:
+            cpu_loss = loss
         self._model = model
         self._optimizer = optimizer
         self._loss = loss
+        self._cpu_loss = cpu_loss
         self._metrics = metrics
         self._save_models = save_models
         self._plotter = Plotter(plotting_options, train_line=train_line_style, test_line=test_line_style)
@@ -200,7 +204,7 @@ class Trainer:
                     classes = predictions >= 0.5
                 else:
                     classes = predictions.argmax(dim=1)
-                test_loss = self._loss(predictions, labels)
+                test_loss = self._cpu_loss(predictions, labels)
                 self._plotter.add_test_loss(test_loss.item())
                 result.append(test_loss.item())
                 for metric in self._metrics:
